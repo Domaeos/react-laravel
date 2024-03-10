@@ -10,7 +10,7 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
     const [password, setPassword] = useState("");
-    const [userToken, setUserToken] = useState(null);
+    const [cookieRefresh, setCookieRefresh] = useState(false);
 
     useEffect(() => {
         const token = document.cookie
@@ -23,13 +23,12 @@ export default function Login() {
                 user_token: token,
             })
             .then((result) => {
-                setUserToken(token);
                 setLoggedIn(true);
             })
             .catch((e) => {
                 console.log(e);
             });
-    }, []);
+    }, [cookieRefresh]);
 
     function handleClick(e) {
         e.preventDefault();
@@ -41,6 +40,7 @@ export default function Login() {
             .then((result) => {
                 console.log(result.data);
                 document.cookie = `user_token=${result.data.authorization.token}; max_age=60*60*24*365; path=/;`;
+                setCookieRefresh((x) => !x);
             })
             .catch((e) => {
                 console.log(e);
@@ -50,40 +50,46 @@ export default function Login() {
     return (
         <>
             {loggedIn && <h1>Logged in</h1>}
-            <Box
-                component="form"
-                sx={{
-                    "& .MuiTextField-root": { m: 1, width: "25ch" },
-                }}
-                noValidate
-                autoComplete="off"
-            >
-                <TextField
-                    id="email"
-                    required
-                    label="Email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => {
-                        setEmail(e.target.value);
+            {!loggedIn && (
+                <Box
+                    component="form"
+                    sx={{
+                        "& .MuiTextField-root": { m: 1, width: "25ch" },
                     }}
-                    variant="standard"
-                />
-                <TextField
-                    id="standard-basic"
-                    required
-                    type="password"
-                    value={password}
-                    onChange={(e) => {
-                        setPassword(e.target.value);
-                    }}
-                    label="Password"
-                    variant="standard"
-                />
-                <Button type="submit" onClick={handleClick} variant="contained">
-                    Login
-                </Button>
-            </Box>
+                    noValidate
+                    autoComplete="off"
+                >
+                    <TextField
+                        id="email"
+                        required
+                        label="Email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                        }}
+                        variant="standard"
+                    />
+                    <TextField
+                        id="standard-basic"
+                        required
+                        type="password"
+                        value={password}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                        }}
+                        label="Password"
+                        variant="standard"
+                    />
+                    <Button
+                        type="submit"
+                        onClick={handleClick}
+                        variant="contained"
+                    >
+                        Login
+                    </Button>
+                </Box>
+            )}
         </>
     );
 }
