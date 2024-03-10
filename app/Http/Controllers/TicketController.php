@@ -12,8 +12,8 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $companies = Ticket::get();
-        return $companies;
+        $tickets = Ticket::get();
+        return $tickets;
     }
 
     /**

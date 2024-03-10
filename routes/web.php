@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/api')->group(function () {
     Route::post('/login', [LoginController::class, 'store']);
-    Route::resource('/tickets', TicketController::class);
+    Route::resource('/tickets', TicketController::class)->middleware('checkToken');
 });
 
 Route::fallback(AppController::class);

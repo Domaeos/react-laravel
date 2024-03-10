@@ -1,5 +1,5 @@
 import { TextField, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import axios from "axios";
 
@@ -8,7 +8,28 @@ export default function Login() {
     axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
 
     const [email, setEmail] = useState("");
+    const [loggedIn, setLoggedIn] = useState(false);
     const [password, setPassword] = useState("");
+    const [userToken, setUserToken] = useState(null);
+
+    useEffect(() => {
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("user_token="))
+            ?.split("=")[1];
+        axios
+            .post("/api/login", {
+                // user_token: "randomtoken",
+                user_token: token,
+            })
+            .then((result) => {
+                setUserToken(token);
+                setLoggedIn(true);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    }, []);
 
     function handleClick(e) {
         e.preventDefault();
@@ -17,8 +38,9 @@ export default function Login() {
                 email,
                 password,
             })
-            .then((e) => {
-                console.log(e);
+            .then((result) => {
+                console.log(result.data);
+                document.cookie = `user_token=${result.data.authorization.token}; max_age=60*60*24*365; path=/;`;
             })
             .catch((e) => {
                 console.log(e);
@@ -27,6 +49,7 @@ export default function Login() {
 
     return (
         <>
+            {loggedIn && <h1>Logged in</h1>}
             <Box
                 component="form"
                 sx={{
