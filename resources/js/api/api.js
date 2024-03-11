@@ -1,21 +1,22 @@
 import axios from "axios";
 
 export async function tokenCheck(token, setLoggedIn) {
-    axios
+    const returnData = await axios
         .post("/api/login", {
             user_token: token,
         })
         .then((result) => {
             setLoggedIn(true);
+            return result.data.user;
         })
         .catch((e) => {
-            console.log(e.response.status);
             if (e.response.status === 400) {
                 console.log("Bad token");
             } else {
                 console.log(e);
             }
         });
+    return returnData;
 }
 
 export async function getAllTickets(setLoading, setTickets) {
@@ -29,7 +30,7 @@ export async function getAllTickets(setLoading, setTickets) {
 }
 
 export async function login(setCookieRefresh, { email, password }) {
-    axios
+    const user = await axios
         .post("/api/login", {
             email,
             password,
@@ -46,6 +47,7 @@ export async function login(setCookieRefresh, { email, password }) {
                 }; max-age=${60 * 60 * 24 * 365}; path=/;`;
             }
             setCookieRefresh((x) => !x);
+            return result;
         })
         .catch((e) => {
             console.log(e);

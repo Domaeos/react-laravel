@@ -10,10 +10,10 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($request = null)
     {
-        $tickets = Ticket::get();
-        return $tickets;
+        $request = Request::capture();
+        return $request;   
     }
 
     /**

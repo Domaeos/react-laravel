@@ -18,7 +18,6 @@ export default function Login({ setCookieRefresh, loggedIn }) {
 
     return (
         <>
-            {loggedIn && <h1>Logged in</h1>}
             {!loggedIn && (
                 <Box
                     component="form"

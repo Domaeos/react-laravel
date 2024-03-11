@@ -35,7 +35,7 @@ class CheckToken
                 return response()->json(["Message" => "Permission denied"], 403);
             }
         }
-
+        $request->request->add(['user' => $user]);
         return $next($request);
     }
 }

@@ -18,7 +18,10 @@ class LoginController extends Controller
             if($request->has("user_token")) {
                 $validToken = Token::where("token", $request->user_token)->first();
                 if($validToken) {
-                    return $validToken;
+                    return response()->json([
+                        'user_token' => $validToken,
+                        'user' => $validToken->user
+                    ]);
                 } else {
                     return response()->json(["Error" => "Bad token"], 400);
                 }
