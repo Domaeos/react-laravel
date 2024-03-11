@@ -25,7 +25,7 @@ class TicketController extends Controller
     }
 
     public function fetchAll() {
-        return "hi";
+        return Ticket::all();
     }
 
     /**

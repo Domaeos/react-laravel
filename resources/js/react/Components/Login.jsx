@@ -1,64 +1,19 @@
 import { TextField, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
+import { login } from "../../api/api";
 import axios from "axios";
 
-export default function Login() {
+export default function Login({ setCookieRefresh, loggedIn }) {
     const csrf = document.getElementById("csrf-meta").content;
     axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
 
     const [email, setEmail] = useState("");
-    const [loggedIn, setLoggedIn] = useState(false);
     const [password, setPassword] = useState("");
-    const [cookieRefresh, setCookieRefresh] = useState(false);
-
-    useEffect(() => {
-        const token = document.cookie
-            .split("; ")
-            .find((row) => row.startsWith("user_token="))
-            ?.split("=")[1];
-        if (token) {
-            axios
-                .post("/api/login", {
-                    user_token: token,
-                })
-                .then((result) => {
-                    setLoggedIn(true);
-                })
-                .catch((e) => {
-                    console.log(e.response.status);
-                    if (e.response.status === 400) {
-                        console.log("Bad token");
-                    } else {
-                        console.log(e);
-                    }
-                });
-        }
-    }, [cookieRefresh]);
 
     function handleClick(e) {
         e.preventDefault();
-        axios
-            .post("/api/login", {
-                email,
-                password,
-            })
-            .then((result) => {
-                // console.log(result.data.user_token);
-                if (result.data.user_token) {
-                    document.cookie = `user_token=${
-                        result.data.user_token
-                    }; max-age=${60 * 60 * 24 * 365}; path=/;`;
-                } else {
-                    document.cookie = `user_token=${
-                        result.data.authorization.token
-                    }; max-age=${60 * 60 * 24 * 365}; path=/;`;
-                }
-                setCookieRefresh((x) => !x);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+        login(setCookieRefresh, { email, password });
     }
 
     return (

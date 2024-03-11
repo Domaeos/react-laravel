@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class Users extends Controller
@@ -12,6 +13,7 @@ class Users extends Controller
     public function index()
     {
         //
+        return User::all();
     }
 
     /**
@@ -28,6 +30,15 @@ class Users extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $request->validate([
+            'name' => 'required|alpha|min:5|max:50',
+            'level' => 'numeric|between:0,3',
+            'email' => 'required|email',
+            'password' => 'required|min:60|max:300'
+        ]);
+        return $validated;
+        $user = new User();
+
     }
 
     /**

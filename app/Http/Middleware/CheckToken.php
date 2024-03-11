@@ -29,7 +29,8 @@ class CheckToken
         }
         
         $user = $tokenEntry->first()->user;
-        if ($route == "allTickets") {
+
+        if ($route == "tickets.all" || $route === "users.all") {
             if($user->level < 3) {
                 return response()->json(["Message" => "Permission denied"], 403);
             }

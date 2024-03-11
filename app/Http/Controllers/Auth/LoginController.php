@@ -23,24 +23,23 @@ class LoginController extends Controller
                     return response()->json(["Error" => "Bad token"], 400);
                 }
             }
+            
             $token = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+
             if ($token) {
                 $user = Auth::user();
                 error_log($user->accessToken);
                 $previousToken = $user->accessToken;
-                // ob_start();
-                // var_dump($previousToken);
-                // $tokenDump = ob_get_contents();
-                // ob_end_clean();
-                // error_log($tokenDump);
+
                 if(!$previousToken) {
                     $logToken = new Token();
                     $logToken->user_id = $user->id;
                     $logToken->token = $token;
                     $logToken->save();
                 }
+
                 return response()->json([
-                    'user_token' => $previousToken ? $previousToken->token : false,
+                    'user_token' => $previousToken ? $previousToken->token : $token,
                     'user' => $user,
                     'authorization' => [
                         'token' => $token,
