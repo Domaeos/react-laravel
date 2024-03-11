@@ -24,6 +24,10 @@ class TicketController extends Controller
         //
     }
 
+    public function fetchAll() {
+        return "hi";
+    }
+
     /**
      * Store a newly created resource in storage.
      */

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->text('description');
+            $table->text('thread_id');
             $table->unsignedBigInteger('support_id')->nullable();
             $table->unsignedBigInteger('client_id');
             $table->foreign('support_id')->references('id')->on('users');

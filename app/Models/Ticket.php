@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
     use HasFactory;
+
+    function clientUser() {
+        return $this->hasOne(User::class, 'client_id');
+    }
+
+    function supportUser() {
+        return $this->hasOne(User::class, 'support_id');
+    }
 }

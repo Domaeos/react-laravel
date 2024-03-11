@@ -9,4 +9,8 @@ class Token extends Model
 {
     use HasFactory;
     public $table = "tokens";
+
+    function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
