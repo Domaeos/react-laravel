@@ -6,8 +6,9 @@ export async function tokenCheck(token, setLoggedIn) {
             user_token: token,
         })
         .then((result) => {
+            axios.defaults.headers.common["user_token"] = token;
             setLoggedIn(true);
-            return result.data.user;
+            return { token, ...result.data.user };
         })
         .catch((e) => {
             if (e.response.status === 400) {
@@ -19,13 +20,15 @@ export async function tokenCheck(token, setLoggedIn) {
     return returnData;
 }
 
-export async function getAllTickets(setLoading, setTickets) {
+export async function getAllTickets(setTickets, setIsLoading) {
     try {
-        const result = (await axios.get("/api/tickets")).data;
-        setTickets(result);
-        setLoading(false);
+        console.log(axios.defaults.headers.common);
+        const results = await axios.get("/api/tickets");
+        setTickets(results.data);
     } catch (e) {
         console.log(e);
+    } finally {
+        setIsLoading(false);
     }
 }
 
@@ -36,7 +39,6 @@ export async function login(setCookieRefresh, { email, password }) {
             password,
         })
         .then((result) => {
-            // console.log(result.data.user_token);
             if (result.data.user_token) {
                 document.cookie = `user_token=${
                     result.data.user_token

@@ -22,6 +22,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'level'
     ];
 
     /**
@@ -65,6 +66,14 @@ class User extends Authenticatable implements JWTSubject
 
     function accessToken() {
         return $this->hasOne(Token::class, 'user_id');
+    }
+
+    function tickets() {
+        if ($this->level == 0) {
+            return $this->hasMany(Ticket::class, 'client_id');
+        } elseif ($this->level < 3) {
+            return $this->hasMany(Ticket::class, 'support_id');
+        }
     }
     
 }

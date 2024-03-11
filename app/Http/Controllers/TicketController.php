@@ -3,17 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\Token;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use function PHPUnit\Framework\isEmpty;
 
 class TicketController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index($request = null)
+    public function index(Request $request)
     {
-        $request = Request::capture();
-        return $request;   
+        $user = Token::where('token', $request->header('user_token'))->first()->user;
+        $tickets = $user->tickets;
+        return $tickets;
     }
 
     /**
@@ -67,8 +72,10 @@ class TicketController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         //
+        $user = Token::where('token', $request->header('user_token'))->first()->user;
+
     }
 }

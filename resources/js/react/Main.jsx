@@ -9,7 +9,7 @@ import NavBar from "./Components/Navbar";
 
 function Main() {
     const { user, setUser } = useContext(UserContext);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [cookieRefresh, setCookieRefresh] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -21,7 +21,10 @@ function Main() {
             ?.split("=")[1];
         if (token) {
             tokenCheck(token, setLoggedIn).then((x) => {
+                console.log(x);
+                axios.defaults.headers.common["user_token"] = x.token;
                 setUser(x);
+                console.log(user);
             });
         }
     }, [cookieRefresh]);
@@ -42,7 +45,7 @@ function Main() {
                 />
                 <Route path="/users" element={<h1>Users</h1>} />
                 <Route path="/users" element={<h1>Users</h1>} />
-                <Route path="/tickets" element={<Tickets />} />
+                <Route path="/tickets" element={user && <Tickets />} />
             </Routes>
         </>
     );
