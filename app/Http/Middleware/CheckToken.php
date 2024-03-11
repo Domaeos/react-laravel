@@ -27,8 +27,8 @@ class CheckToken
         if($tokenEntry->isEmpty()) {
             return response()->json(["Message" => "Bad token"], 400);
         }
-
-        $user = User::find($tokenEntry->value('user_id'));
+        
+        $user = $tokenEntry->first()->user;
         if ($route == "allTickets") {
             if($user->level < 3) {
                 return response()->json(["Message" => "Permission denied"], 403);

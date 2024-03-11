@@ -26,7 +26,8 @@ class LoginController extends Controller
             $token = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
             if ($token) {
                 $user = Auth::user();
-                $previousToken = Token::where("user_id", $user->id)->first();
+                error_log($user->accessToken);
+                $previousToken = $user->accessToken;
                 // ob_start();
                 // var_dump($previousToken);
                 // $tokenDump = ob_get_contents();

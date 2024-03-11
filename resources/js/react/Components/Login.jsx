@@ -26,7 +26,12 @@ export default function Login() {
                     setLoggedIn(true);
                 })
                 .catch((e) => {
-                    console.log(e);
+                    console.log(e.response.status);
+                    if (e.response.status === 400) {
+                        console.log("Bad token");
+                    } else {
+                        console.log(e);
+                    }
                 });
         }
     }, [cookieRefresh]);
