@@ -26,11 +26,20 @@ class LoginController extends Controller
             $token = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
             if ($token) {
                 $user = Auth::user();
-                $logToken = new Token();
-                $logToken->user_id = $user->id;
-                $logToken->token = $token;
-                $logToken->save();
+                $previousToken = Token::where("user_id", $user->id)->first();
+                // ob_start();
+                // var_dump($previousToken);
+                // $tokenDump = ob_get_contents();
+                // ob_end_clean();
+                // error_log($tokenDump);
+                if(!$previousToken) {
+                    $logToken = new Token();
+                    $logToken->user_id = $user->id;
+                    $logToken->token = $token;
+                    $logToken->save();
+                }
                 return response()->json([
+                    'user_token' => $previousToken ? $previousToken->token : false,
                     'user' => $user,
                     'authorization' => [
                         'token' => $token,

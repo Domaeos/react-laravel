@@ -17,17 +17,18 @@ export default function Login() {
             .split("; ")
             .find((row) => row.startsWith("user_token="))
             ?.split("=")[1];
-        axios
-            .post("/api/login", {
-                // user_token: "randomtoken",
-                user_token: token,
-            })
-            .then((result) => {
-                setLoggedIn(true);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+        if (token) {
+            axios
+                .post("/api/login", {
+                    user_token: token,
+                })
+                .then((result) => {
+                    setLoggedIn(true);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        }
     }, [cookieRefresh]);
 
     function handleClick(e) {
@@ -38,8 +39,16 @@ export default function Login() {
                 password,
             })
             .then((result) => {
-                console.log(result.data);
-                document.cookie = `user_token=${result.data.authorization.token}; max_age=60*60*24*365; path=/;`;
+                // console.log(result.data.user_token);
+                if (result.data.user_token) {
+                    document.cookie = `user_token=${
+                        result.data.user_token
+                    }; max-age=${60 * 60 * 24 * 365}; path=/;`;
+                } else {
+                    document.cookie = `user_token=${
+                        result.data.authorization.token
+                    }; max-age=${60 * 60 * 24 * 365}; path=/;`;
+                }
                 setCookieRefresh((x) => !x);
             })
             .catch((e) => {
