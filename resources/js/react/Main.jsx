@@ -20,12 +20,14 @@ function Main() {
             .find((row) => row.startsWith("user_token="))
             ?.split("=")[1];
         if (token) {
-            tokenCheck(token, setLoggedIn).then((x) => {
-                console.log(x);
-                axios.defaults.headers.common["user_token"] = x.token;
-                setUser(x);
-                console.log(user);
-            });
+            tokenCheck(token, setLoggedIn)
+                .then((x) => {
+                    axios.defaults.headers.common["user_token"] = x.token;
+                    setUser(x);
+                })
+                .catch((e) => {
+                    document.cookie = `user_token=; max-age=0; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;`;
+                });
         }
     }, [cookieRefresh]);
 

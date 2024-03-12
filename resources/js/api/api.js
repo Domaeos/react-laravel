@@ -11,11 +11,9 @@ export async function tokenCheck(token, setLoggedIn) {
             return { token, ...result.data.user };
         })
         .catch((e) => {
-            if (e.response.status === 400) {
-                console.log("Bad token");
-            } else {
-                console.log(e);
-            }
+            // if (e.response.status === 400) {
+            //     // Bad token
+            // }
         });
     return returnData;
 }
@@ -51,7 +49,5 @@ export async function login(setCookieRefresh, { email, password }) {
             setCookieRefresh((x) => !x);
             return result;
         })
-        .catch((e) => {
-            console.log(e);
-        });
+        .catch((e) => {});
 }
