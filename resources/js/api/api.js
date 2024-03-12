@@ -31,12 +31,14 @@ export async function tokenCheck(token, setLoggedIn) {
 export async function getAllTickets(setTickets, setIsLoading) {
     try {
         const results = await axios.get("/api/tickets");
-        setTickets(results.data);
+        return results.data;
     } catch (e) {
     } finally {
         setIsLoading(false);
     }
 }
+
+export async function getTicketsBy() {}
 
 export async function login(setCookieRefresh, { email, password }) {
     const user = await axios

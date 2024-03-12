@@ -6,25 +6,36 @@ import { NewTicket } from "./NewTicket";
 import { Paper } from "@mui/material";
 import { useContext } from "react";
 import { UserContext } from "./UserProvider";
+import { ShowTickets } from "./ShowTickets";
 
 export function Tickets() {
     const { user, setUser } = useContext(UserContext);
-    console.log(user);
+
     const [tickets, setTickets] = useState([]);
+    const [ticketRefresh, setTicketRefresh] = useState(false);
     const [currentAction, setCurrentAction] = useState("");
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        getAllTickets(setTickets, setIsLoading);
-    }, []);
+        getAllTickets(setTickets, setIsLoading).then((x) => {
+            setTickets(x);
+            console.log(tickets);
+        });
+    }, [ticketRefresh]);
 
     if (isLoading) return <Loader open={isLoading} />;
-    console.log(currentAction);
 
     return (
         <>
             {currentAction === "" && (
-                <h1>Choose an action from bottom of page</h1>
+                <>
+                    <h1>Choose an action from bottom of page</h1>
+                </>
+            )}
+            {(currentAction === "open" ||
+                currentAction === "all" ||
+                currentAction === "resolved") && (
+                <ShowTickets action={currentAction} tickets={tickets} />
             )}
             {currentAction === "new" && <NewTicket />}
             <Paper

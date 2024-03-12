@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('read')->default(false);
             $table->boolean('closed')->default(false);
             $table->boolean('resolved')->default(false);
+            $table->string('written_by');
             $table->unsignedBigInteger('support_id')->nullable();
             $table->unsignedBigInteger('client_id');
             $table->foreign('support_id')->references('id')->on('users');

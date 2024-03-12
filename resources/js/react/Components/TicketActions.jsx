@@ -6,7 +6,6 @@ import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import { useState } from "react";
 
 export const TicketActions = ({ level, currentAction, setCurrentAction }) => {
-    console.log(currentAction);
     return (
         <BottomNavigation
             showLabels
@@ -16,6 +15,7 @@ export const TicketActions = ({ level, currentAction, setCurrentAction }) => {
             }}
         >
             <BottomNavigationAction
+                value="open"
                 label="Open"
                 icon={<ImportContactsIcon />}
             />
