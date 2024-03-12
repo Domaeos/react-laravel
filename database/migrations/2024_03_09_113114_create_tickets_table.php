@@ -16,6 +16,9 @@ return new class extends Migration
             $table->timestamps();
             $table->text('description');
             $table->text('thread_id');
+            $table->boolean('read')->default(false);
+            $table->boolean('closed')->default(false);
+            $table->boolean('resolved')->default(false);
             $table->unsignedBigInteger('support_id')->nullable();
             $table->unsignedBigInteger('client_id');
             $table->foreign('support_id')->references('id')->on('users');

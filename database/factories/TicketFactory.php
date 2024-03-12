@@ -22,7 +22,16 @@ class TicketFactory extends Factory
             "client_id" => User::where('level', 0)->inRandomOrder()->first(),
             "support_id" => User::whereBetween('level', [1,2])->inRandomOrder()->first(),
             "thread_id" => Str::random(100),
+            "read" => true,
+            "closed" => $this->faker->boolean(20),
+            "resolved" => $this->faker->boolean(50),
             "description" => $this->faker->sentence(30)
         ];
+
+        /*
+         $table->boolean('read')->default(false);
+            $table->boolean('closed')->default(false);
+            $table->boolean('resolved')->default(false);
+            */
     }
 }

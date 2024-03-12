@@ -15,9 +15,6 @@ return new class extends Migration
             $table->id();
             $table->text('token');
             $table->timestamps();
-            $table->boolean('read');
-            $table->boolean('closed');
-            $table->boolean('resolved');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
         });
