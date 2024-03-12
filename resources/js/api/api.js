@@ -1,5 +1,15 @@
 import axios from "axios";
 
+export async function submitTicket(description) {
+    try {
+        console.log("submitting");
+        const post = await axios.post("/api/tickets/", { description });
+        console.log(post);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export async function tokenCheck(token, setLoggedIn) {
     const returnData = await axios
         .post("/api/login", {
@@ -20,11 +30,9 @@ export async function tokenCheck(token, setLoggedIn) {
 
 export async function getAllTickets(setTickets, setIsLoading) {
     try {
-        console.log(axios.defaults.headers.common);
         const results = await axios.get("/api/tickets");
         setTickets(results.data);
     } catch (e) {
-        console.log(e);
     } finally {
         setIsLoading(false);
     }

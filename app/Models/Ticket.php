@@ -9,6 +9,15 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'description',
+        'support_id',
+        'thread_id',
+        'client_id',
+        'resolved',
+        'closed',
+        'read'
+    ];
     function clientUser() {
         return $this->hasOne(User::class, 'client_id');
     }

@@ -35,6 +35,11 @@ class CheckToken
                 return response()->json(["Message" => "Permission denied"], 403);
             }
         }
+        if ($route === "tickets.store") {
+            if($user->level !== 0) {
+                return response()->json(["Message" => "Permission denied"], 403);
+            }
+        }
         $request->request->add(['user' => $user]);
         return $next($request);
     }

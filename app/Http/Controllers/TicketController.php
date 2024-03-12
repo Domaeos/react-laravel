@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\Token;
+use App\Models\User;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -38,13 +41,34 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        // $company = new Ticket();
-        // $company->name = $request->name;
-        // $company->ownerId = $request->ownerId;
-        // $company->save();
-        // return ["Message" => "Saved"];
+        $validated = $request->validate([
+            'description' => 'required|string|min:10'
+        ]);
+
+        $user = Token::where('token', $request->header('user_token'))->first()->user;
+
+        $supports = DB::table('users')
+        // ->select('name', 'id', DB::raw('COUNT(support_id) AS assignments')) // Mysql doesnt allow
+        ->select('users.id')
+        ->leftJoin('tickets', 'tickets.support_id', '=', 'users.id')
+        ->where('users.level', 1)
+        ->get()
+        ->toArray();
+        $supportCount = array_count_values(array_map(fn($x) => $x->id, $supports));
+        $newSupportId = array_search(min($supportCount), $supportCount);
+        $newTicket = new Ticket();
+        $newTicket->client_id = $user->id;
+        $newTicket->support_id = $newSupportId;
+        $newTicket->read = true;
+        $newTicket->thread_id = uniqid($user->id, true);
+        $newTicket->description = $request->description;
+        $newTicket->save();
+
+        return response()->json(['Message' => 'Success'], 201);
+        
     }
 
+    
     /**
      * Display the specified resource.
      */
