@@ -41,39 +41,63 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'description' => 'required|string|min:10'
-        ]);
-
         $user = Token::where('token', $request->header('user_token'))->first()->user;
 
-        $supports = DB::table('users')
-        // ->select('name', 'id', DB::raw('COUNT(support_id) AS assignments')) // Mysql doesnt allow
-        ->select('users.id')
-        ->leftJoin('tickets', 'tickets.support_id', '=', 'users.id')
-        ->where('users.level', 1)
-        ->get()
-        ->toArray();
-        $supportCount = array_count_values(array_map(fn($x) => $x->id, $supports));
-        $newSupportId = array_search(min($supportCount), $supportCount);
+        if (!$request->filled('threadId')) {
+            $validated = $request->validate([
+                'description' => 'required|string|min:10'
+            ]);
+        } else {
+            $ticketThread = $user->tickets->where('thread_id', $request->threadId)->first();
+        }
+
+        if($ticketThread->client_id !== $user->id && $ticketThread->support_id !== $user->id) abort(403);
+
+        
         $newTicket = new Ticket();
-        $newTicket->client_id = $user->id;
-        $newTicket->support_id = $newSupportId;
+
+        if (!$request->filled('threadId')) {
+            // If not a reply, find support with level 1 with lowest amount of tickets
+            // A little long so should break this into seperate controller 
+            $supports = DB::table('users')
+            // ->select('name', 'id', DB::raw('COUNT(support_id) AS assignments')) // Mysql doesnt allow
+            ->select('users.id')
+            ->leftJoin('tickets', 'tickets.support_id', '=', 'users.id')
+            ->where('users.level', 1)
+            ->get()
+            ->toArray();
+            $supportCount = array_count_values(array_map(fn($x) => $x->id, $supports));
+            $newSupportId = array_search(min($supportCount), $supportCount);
+            $newTicket->client_id = $user->id;
+            $newTicket->written_by = "client";
+            $newTicket->support_id = $newSupportId;
+            $newTicket->thread_id = uniqid($user->id, true);
+        } else {
+            // If a reply prepopulate from previous found ticket and just add description
+            $newTicket->client_id = $ticketThread->client_id;
+            $newTicket->support_id = $ticketThread->support_id;
+            $newTicket->thread_id = $ticketThread->thread_id;
+            $newTicket->written_by = $user->level > 0 ? "support" : "client";
+
+        }
         $newTicket->read = true;
-        $newTicket->thread_id = uniqid($user->id, true);
         $newTicket->description = $request->description;
+
         $newTicket->save();
 
-        return response()->json(['Message' => 'Success'], 201);
+        return $newTicket;
         
     }
 
     public function getThread($id) {
         $user = Token::where('token', request()->header('user_token'))->first()->user;
+
         $thread = $user->tickets->where('thread_id', $id);
+
         if($thread->isEmpty()) {
             abort(400, "Bad thread request");
         }
+
         return $thread;
     }
     /**

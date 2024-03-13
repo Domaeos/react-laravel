@@ -4,10 +4,35 @@
     box-sizing: content-box;
 }
 .main-grid {
+    margin-top: 20px;
     display: grid;
     width: 100vw;
     justify-content: center;
     justify-items: center;
+}
+.thread-reply-form {
+    width: 100%;
+}
+.thread-input-description {
+    resize: none;
+    margin-bottom: 10px;
+}
+.thread-card {
+    width: 500px;
+    margin-bottom: 20px;
+}
+.thread-card.support {
+    background-color: #cbcbcb;
+    justify-self: left;
+}
+.thread-card.client {
+    background-color: #48aff4ff;
+    justify-self: right;
+}
+.thread-card-grid {
+    justify-items: center;
+    display: grid;
+    width: 700px;
 }
 .ticket-grid {
     padding-top: 20px;

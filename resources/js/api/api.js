@@ -2,18 +2,25 @@ import axios from "axios";
 
 export async function getThread(threadId) {
     try {
-        const result = await axios.get(`/api/tickets/thread/${threadId}`);
-        console.log(result);
+        const results = await axios.get(`/api/tickets/thread/${threadId}`);
+        return results.data;
     } catch (e) {
         console.log(e);
     }
 }
 
-export async function submitTicket(description) {
+export async function submitTicket(description, threadId = null) {
     try {
-        console.log("submitting");
-        const post = await axios.post("/api/tickets/", { description });
-        console.log(post);
+        if (!threadId) {
+            const result = await axios.post("/api/tickets/", { description });
+        } else {
+            const result = await axios.post("/api/tickets", {
+                description,
+                threadId,
+            });
+            console.log(result);
+            return true;
+        }
     } catch (e) {
         console.log(e);
     }

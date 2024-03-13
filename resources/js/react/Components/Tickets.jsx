@@ -20,7 +20,6 @@ export function Tickets() {
         user &&
             getAllTickets(setTickets, setIsLoading).then((x) => {
                 setTickets(() => x);
-                console.log(x);
             });
     }, [ticketRefresh]);
 
