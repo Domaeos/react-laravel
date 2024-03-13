@@ -68,7 +68,14 @@ class TicketController extends Controller
         
     }
 
-    
+    public function getThread($id) {
+        $user = Token::where('token', request()->header('user_token'))->first()->user;
+        $thread = $user->tickets->where('thread_id', $id);
+        if($thread->isEmpty()) {
+            abort(400, "Bad thread request");
+        }
+        return $thread;
+    }
     /**
      * Display the specified resource.
      */

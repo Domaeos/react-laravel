@@ -21,9 +21,7 @@ class Ticket extends Model
     function clientUser() {
         return $this->hasOne(User::class, 'client_id');
     }
-    // function thread() {
-    //     return $this->belongsToMany(Ticket::class, 'tickets')
-    // }
+    
     function supportUser() {
         return $this->hasOne(User::class, 'support_id');
     }

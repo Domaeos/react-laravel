@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Thread;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\Users;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::prefix('/api')->group(function () {
     Route::post('/users', [Users::class, "store"])->name('users.post')->middleware('checkToken');
     Route::post('/login', [LoginController::class, 'store']);
     Route::middleware(['checkToken'])->group(function() {
+        Route::get('/tickets/thread/{id}', [TicketController::class, "getThread"])->name('tickets.thread');
         Route::get('/tickets/all', [TicketController::class, "fetchAll"])->name('tickets.all');
         Route::resource('/tickets', TicketController::class);
     });

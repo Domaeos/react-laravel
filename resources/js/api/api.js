@@ -2,7 +2,8 @@ import axios from "axios";
 
 export async function getThread(threadId) {
     try {
-        axios;
+        const result = await axios.get(`/api/tickets/thread/${threadId}`);
+        console.log(result);
     } catch (e) {
         console.log(e);
     }
