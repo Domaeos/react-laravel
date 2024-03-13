@@ -17,10 +17,11 @@ export function Tickets() {
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        getAllTickets(setTickets, setIsLoading).then((x) => {
-            setTickets(x);
-            console.log(tickets);
-        });
+        user &&
+            getAllTickets(setTickets, setIsLoading).then((x) => {
+                setTickets(() => x);
+                console.log(x);
+            });
     }, [ticketRefresh]);
 
     if (isLoading) return <Loader open={isLoading} />;

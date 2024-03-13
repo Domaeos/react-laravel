@@ -1,23 +1,39 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
+import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
+import { trimDate } from "../../utils/utils";
 
 export function TicketCard({ ticket }) {
-    const ticketStyle = {
-        width: "100%",
-        margin: "20px",
-    };
+    function handleClick(e) {
+        console.log(e);
+    }
+
     return (
-        <Card style={ticketStyle}>
-            <CardActionArea>
+        <Card className="ticket-card">
+            <CardActionArea
+                component={Link}
+                to={`/tickets/thread/${ticket.thread_id}`}
+            >
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {ticket.created_at}
+                    <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="div"
+                        className="ticket-card-header"
+                    >
+                        <div className="ticket-card-date">
+                            {trimDate(ticket.created_at)}
+                        </div>
+                        <div className="ticket-card-author"></div>
                     </Typography>
 
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography
+                        variant="body2"
+                        className="ticket-card-body"
+                        color="text.secondary"
+                    >
                         {ticket.description}
                     </Typography>
                 </CardContent>

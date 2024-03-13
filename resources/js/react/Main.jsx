@@ -5,11 +5,12 @@ import { Router, Route, Routes } from "react-router-dom";
 import { tokenCheck } from "../api/api";
 import { UserContext } from "./Components/UserProvider";
 import { Tickets } from "./Components/Tickets";
+import { Thread } from "./Components/Thread";
 import NavBar from "./Components/Navbar";
 
 function Main() {
     const { user, setUser } = useContext(UserContext);
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [cookieRefresh, setCookieRefresh] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -23,33 +24,45 @@ function Main() {
             tokenCheck(token, setLoggedIn)
                 .then((x) => {
                     axios.defaults.headers.common["user_token"] = x.token;
-                    console.log(x);
-                    setUser(x);
+                    setUser(() => x);
                 })
                 .catch((e) => {
                     document.cookie = `user_token=; max-age=0; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;`;
+                })
+                .finally(() => {
+                    setIsLoading(() => false);
                 });
         }
     }, [cookieRefresh]);
 
+    if (isLoading) return <></>;
+
     return (
         <>
             <NavBar />
-            <Routes>
-                <Route path="/" element={<h1>Home</h1>} />
-                <Route
-                    path="/login"
-                    element={
-                        <Login
-                            setCookieRefresh={setCookieRefresh}
-                            loggedIn={loggedIn}
-                        />
-                    }
-                />
-                <Route path="/users" element={<h1>Users</h1>} />
-                <Route path="/users" element={<h1>Users</h1>} />
-                <Route path="/tickets" element={user && <Tickets />} />
-            </Routes>
+            <div className="main-grid">
+                <Routes>
+                    <Route path="/" element={<h1>Home</h1>} />
+                    <Route
+                        path="/login"
+                        element={
+                            <Login
+                                setCookieRefresh={setCookieRefresh}
+                                loggedIn={loggedIn}
+                            />
+                        }
+                    />
+                    {user && (
+                        <Route path="/tickets">
+                            <Route
+                                path="thread/:threadId"
+                                element={<Thread />}
+                            />
+                            <Route path="" element={<Tickets />} />
+                        </Route>
+                    )}
+                </Routes>
+            </div>
         </>
     );
 }

@@ -18,13 +18,15 @@ class TicketFactory extends Factory
      */
     public function definition(): array
     {
+        $clientID = User::where('level', 0)->inRandomOrder()->first();
         return [
-            "client_id" => User::where('level', 0)->inRandomOrder()->first(),
+            "client_id" => $clientID,
             "support_id" => User::whereBetween('level', [1,2])->inRandomOrder()->first(),
             "thread_id" => Str::random(100),
             "read" => true,
             "closed" => $this->faker->boolean(20),
             "resolved" => $this->faker->boolean(50),
+            "written_by" => "client",
             "description" => $this->faker->sentence(30)
         ];
 

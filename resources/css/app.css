@@ -1,1 +1,26 @@
-
+.body {
+    margin: none;
+    padding: none;
+    box-sizing: content-box;
+}
+.main-grid {
+    display: grid;
+    width: 100vw;
+    justify-content: center;
+    justify-items: center;
+}
+.ticket-grid {
+    padding-top: 20px;
+    display: grid;
+    width: 50vw;
+}
+.ticket-card-header {
+    display: "grid";
+}
+.ticket-card {
+    background-color: #3b383821 !important;
+    margin-bottom: 20px;
+}
+.ticket-card:last-of-type {
+    margin-bottom: 100px;
+}

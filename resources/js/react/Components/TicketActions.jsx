@@ -3,7 +3,6 @@ import AddIcon from "@mui/icons-material/Add";
 import DoneIcon from "@mui/icons-material/Done";
 import TocIcon from "@mui/icons-material/Toc";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
-import { useState } from "react";
 
 export const TicketActions = ({ level, currentAction, setCurrentAction }) => {
     return (
