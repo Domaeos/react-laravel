@@ -3,12 +3,14 @@ import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import { useState } from "react";
 import { submitTicket } from "../../api/api";
 
-export const ThreadReply = ({ threadId }) => {
+export const ThreadReply = ({ threadId, setThreads }) => {
     const [description, setDescription] = useState("");
 
     function handleClick(e) {
         e.preventDefault();
-        submitTicket(description, threadId);
+        submitTicket(description, threadId).then((newReply) => {
+            setThreads((old) => [...old].push(newReply));
+        });
     }
 
     return (

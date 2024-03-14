@@ -13,16 +13,17 @@ export async function submitTicket(description, threadId = null) {
     try {
         if (!threadId) {
             const result = await axios.post("/api/tickets/", { description });
+            console.log(result.data);
         } else {
             const result = await axios.post("/api/tickets", {
                 description,
                 threadId,
             });
-            console.log(result);
-            return true;
+            console.log(result.data);
+            return result.data;
         }
     } catch (e) {
-        console.log(e);
+        console.log(e.response);
     }
 }
 
@@ -54,8 +55,6 @@ export async function getAllTickets(setTickets, setIsLoading) {
         setIsLoading(false);
     }
 }
-
-export async function getTicketsBy() {}
 
 export async function login(setCookieRefresh, { email, password }) {
     const user = await axios

@@ -22,7 +22,7 @@ export function Thread() {
             .finally(() => {
                 setIsLoading(false);
             });
-    }, []);
+    }, [threads]);
 
     if (isLoading) return <Loader />;
 
@@ -31,8 +31,10 @@ export function Thread() {
             {threads.length && (
                 <div className="thread-grid">
                     {threads.length &&
-                        threads.map((thread) => <ThreadCard thread={thread} />)}
-                    <ThreadReply threadId={threadId} />
+                        threads.map((thread) => (
+                            <ThreadCard key={threads.id} thread={thread} />
+                        ))}
+                    <ThreadReply setThreads={setThreads} threadId={threadId} />
                 </div>
             )}
         </>

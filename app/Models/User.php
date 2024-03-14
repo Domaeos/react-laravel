@@ -70,9 +70,9 @@ class User extends Authenticatable implements JWTSubject
 
     function tickets() {
         if ($this->level == 0) {
-            return $this->hasMany(Ticket::class, 'client_id');
+            return $this->hasMany(Ticket::class, 'client_id')->orderBy('created_at', 'desc');
         } elseif ($this->level < 3) {
-            return $this->hasMany(Ticket::class, 'support_id');
+            return $this->hasMany(Ticket::class, 'support_id')->orderBy('created_at', 'desc');
         }
     }
     

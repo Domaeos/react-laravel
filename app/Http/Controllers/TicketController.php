@@ -49,9 +49,9 @@ class TicketController extends Controller
             ]);
         } else {
             $ticketThread = $user->tickets->where('thread_id', $request->threadId)->first();
+            if($ticketThread->client_id !== $user->id && $ticketThread->support_id !== $user->id) abort(403);
         }
 
-        if($ticketThread->client_id !== $user->id && $ticketThread->support_id !== $user->id) abort(403);
 
         
         $newTicket = new Ticket();
