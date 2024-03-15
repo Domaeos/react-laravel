@@ -24,6 +24,7 @@ function Main() {
             tokenCheck(token, setLoggedIn)
                 .then((x) => {
                     axios.defaults.headers.common["user_token"] = x.token;
+                    console.log(x);
                     setUser(() => x);
                 })
                 .catch((e) => {

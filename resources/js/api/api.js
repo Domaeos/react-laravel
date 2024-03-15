@@ -35,6 +35,7 @@ export async function tokenCheck(token, setLoggedIn) {
         .then((result) => {
             axios.defaults.headers.common["user_token"] = token;
             setLoggedIn(true);
+            console.log(result);
             return { token, ...result.data.user };
         })
         .catch((e) => {

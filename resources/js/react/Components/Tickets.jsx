@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllTickets } from "../../api/api";
-import { Loader } from "./Loader";
+import { Loader } from "./SpinLoader";
 import { TicketActions } from "./TicketActions";
 import { NewTicket } from "./NewTicket";
 import { Paper } from "@mui/material";
@@ -9,7 +9,7 @@ import { UserContext } from "./UserProvider";
 import { ShowTickets } from "./ShowTickets";
 
 export function Tickets() {
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
     const [tickets, setTickets] = useState([]);
     const [ticketRefresh, setTicketRefresh] = useState(false);
