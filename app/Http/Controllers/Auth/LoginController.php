@@ -52,7 +52,8 @@ class LoginController extends Controller
             }
             return response()->json(["login" => false], 400);
         } catch (Exception $e) {
-            return $e;
+            error_log($e);
+            return response()->json(["Error" => "Server error"], 500);
         }
     }
 }

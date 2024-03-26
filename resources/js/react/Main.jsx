@@ -7,10 +7,13 @@ import { UserContext } from "./Components/UserProvider";
 import { Tickets } from "./Components/Tickets";
 import { Thread } from "./Components/Thread";
 import NavBar from "./Components/Navbar";
+import { TicketActions } from "./Components/TicketActions";
+import { Paper } from "@mui/material";
 
 function Main() {
     const { user, setUser } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentAction, setCurrentAction] = useState("");
 
     const [cookieRefresh, setCookieRefresh] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -57,9 +60,61 @@ function Main() {
                         <Route path="/tickets">
                             <Route
                                 path="thread/:threadId"
-                                element={<Thread />}
+                                element={
+                                    (
+                                        <Thread
+                                            currentAction={currentAction}
+                                            setCurrentAction={setCurrentAction}
+                                        />
+                                    ) && (
+                                        <Paper
+                                            sx={{
+                                                position: "fixed",
+                                                bottom: 0,
+                                                left: 0,
+                                                right: 0,
+                                            }}
+                                            elevation={3}
+                                        >
+                                            <TicketActions
+                                                level={user.level}
+                                                currentAction={currentAction}
+                                                setCurrentAction={
+                                                    setCurrentAction
+                                                }
+                                            />
+                                        </Paper>
+                                    )
+                                }
                             />
-                            <Route path="" element={<Tickets />} />
+                            <Route
+                                path=""
+                                element={
+                                    (
+                                        <Tickets
+                                            currentAction={currentAction}
+                                        />
+                                    ) && (
+                                        <Paper
+                                            sx={{
+                                                position: "fixed",
+                                                bottom: 0,
+                                                left: 0,
+                                                right: 0,
+                                            }}
+                                            elevation={3}
+                                        >
+                                            <TicketActions
+                                                level={user.level}
+                                                currentAction={currentAction}
+                                                setCurrentAction={
+                                                    setCurrentAction
+                                                }
+                                            />
+                                        </Paper>
+                                    )
+                                }
+                            />
                         </Route>
                     )}
                 </Routes>

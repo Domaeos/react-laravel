@@ -14,7 +14,7 @@ import {
     Paper,
 } from "@mui/material";
 
-export function Thread({ currentAction, setCurrentAction }) {
+export function Thread() {
     const { user } = useContext(UserContext);
 
     const { threadId } = useParams();
@@ -31,7 +31,7 @@ export function Thread({ currentAction, setCurrentAction }) {
                 for (const index in threads) {
                     threadArray.push(threads[index]); // Eloquent seems to return an object with relational where?
                 }
-                setThreads(() => threadArray);
+                setThreads(() => threadArray.reverse());
             })
             .finally(() => {
                 setIsLoading(false);
